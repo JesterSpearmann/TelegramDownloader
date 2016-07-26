@@ -45,10 +45,23 @@ $webhookIn = file_get_contents("php://input"); // get JSON input from Telegram
 $sJ = json_decode($webhookIn); // decode it
 
 // If no photo is contained, ignore
-if(empty($sJ->message->photo)) die(); 
+if(empty($sJ->message->photo) && empty($sJ->message->document)) die(); 
 
 $origin = $sJ->message->chat->id;
-$p = end($sJ->message->photo)->file_id;
+
+switch(true) {
+	case isset($sJ->message->photo):
+		$p = end($sJ->message->photo)->file_id;
+		break;
+		
+	case isset($sJ->message->document):
+		$p = $sJ->message->document->file_id;
+		break;
+		
+	default:
+		die();
+		break;
+}
 
 $bot = new ImageDownloaderBot($cfg->apikey);
 if(!is_dir("downloaded/" . $origin)) { // if subfolder for origin chat does not exist

@@ -1,6 +1,4 @@
 <?php
-include "libky.class.php";
-
 class ImageDownloaderBot {
 	const API_BASEPATH = "https://api.telegram.org/bot";
 	const API_FILEPATH = "https://api.telegram.org/file/bot";
